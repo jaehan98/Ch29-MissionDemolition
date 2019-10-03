@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Slingshot : MonoBehaviour {
 
-
+    static private Slingshot S;
     // Place class variables here
     [Header("Set in Inspector")]                                           // a
     public GameObject prefabProjectile;
@@ -19,8 +19,15 @@ public class Slingshot : MonoBehaviour {
     public GameObject projectile;                                      // b
     public bool aimingMode;                                         // b
     private Rigidbody projectileRigidbody;
-    public float velocityMult = 8f; 
-
+    public float velocityMult = 8f;
+    static public Vector3 LAUNCH_POS
+    {                                        // b
+        get
+        {
+            if (S == null) return Vector3.zero;
+            return S.launchPos;
+        }
+    }
     void OnMouseEnter()
     {
         //print("Slingshot:OnMouseEnter()");
@@ -87,6 +94,8 @@ public class Slingshot : MonoBehaviour {
             projectileRigidbody.velocity = -mouseDelta * velocityMult;
             FollowCam.POI = projectile;
             projectile = null;
+            MissionDemolition.ShotFired();                    // a
+            ProjectileLine.S.poi = projectile;                // b  
         }
     }                        // e
 
